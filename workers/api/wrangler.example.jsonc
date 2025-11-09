@@ -1,0 +1,19 @@
+{
+  // Mailhop API Worker - Example Wrangler Config
+  // Copy this file to wrangler.local.jsonc and fill in your own D1 database_id.
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  "name": "mailhop-api",
+  "main": "src/index.js",
+  "compatibility_date": "2025-11-01",
+
+  "observability": { "enabled": true },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mailhop-db",
+      "database_id": "<YOUR_D1_DATABASE_ID>"
+    }
+  ]
+}

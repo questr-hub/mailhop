@@ -1,0 +1,95 @@
+# ─────────────────────────────────────────────
+# Mailhop Project .gitignore
+# (Node + Cloudflare Workers + CLI)
+# ─────────────────────────────────────────────
+
+### Node / npm ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# If you want reproducible installs, REMOVE this line and commit package-lock.json:
+package-lock.json
+
+### Cloudflare Wrangler ###
+**/.wrangler/              # wrangler state/cache anywhere
+dist/                   # build outputs (if any)
+.cache/
+build/
+**/state
+
+### Cloudflare Wrangler / Miniflare state ###
+**/.wrangler/
+**/state/
+
+# Local, real configs (per worker) — DO NOT commit
+**/wrangler.local.jsonc
+
+### D1 & sqlite local database files (created by wrangler dev, etc.) ###
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-shm
+*.sqlite-wal
+
+### Environment / Secrets ###
+.env
+.env.local
+.env.*.local
+
+# Just in case someone exports secrets to files
+*_secret.txt
+*_secrets.json
+
+### Logs & Tail Outputs ###
+*.log
+**/logs/                # any logs directory, anywhere
+wrangler.log
+tail.log
+debug.log
+**/tmp/                 # any tmp dir we might create
+
+### CLI Artifacts ###
+cli/mailhop             # in case you ever build a local binary bundle
+cli/*.tgz
+cli/*.zip
+
+### System / OS ###
+.DS_Store
+Thumbs.db
+Icon?
+ehthumbs.db
+
+### Editor / IDE ###
+.vscode/
+.idea/
+*.swp
+*.swo
+
+### Backups / Archives ###
+*.tar
+*.tar.gz
+*.zip
+*.bak
+*.tmp
+
+### Data Snapshots (optional; you can version by hand if desired) ###
+aliases.*.json
+email_logs.*.json
+mailhop-d1-*.sql
+
+### Releases ###
+mailhop-v*.tar.gz
+docs/release-notes/*.md~
+
+# ─────────────────────────────────────────────
+# Explicit keep rules (if needed later)
+# Remove or adjust these if they get in your way.
+# Uncomment to force-include important files:
+# !schema.sql
+# !package.json
+# !bin/mailhop.js
+# !**/wrangler.example.jsonc
+# ─────────────────────────────────────────────

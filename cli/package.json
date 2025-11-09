@@ -1,0 +1,16 @@
+{
+  "name": "mailhop-cli",
+  "version": "1.1.0",
+  "description": "CLI tool for managing Mailhop email aliases using the Cloudflare Workers API.",
+  "bin": {
+    "mailhop": "./bin/mailhop.js"
+  },
+  "type": "module",
+  "keywords": ["email", "alias", "cli", "cloudflare", "d1", "mailhop"],
+  "author": "Sean McKay",
+  "license": "HOPL",
+  "repository": "github:questr-hub/mailhop",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,33 @@
+# ─────────────────────────────────────────────
+# Mailhop Project .gitattributes
+# Normalize line endings, enable smart diffs
+# ─────────────────────────────────────────────
+
+# Always use LF for text files (avoids CRLF/LF churn)
+* text=auto eol=lf
+
+# ── Source files ─────────────────────────────
+*.js     text diff=javascript
+*.json   text diff=json
+*.sql    text diff=sql
+*.md     text diff=markdown
+*.yml    text diff=yaml
+*.yaml   text diff=yaml
+*.sh     text diff=bash
+*.cjs    text diff=javascript
+*.mjs    text diff=javascript
+
+# ── Configs ──────────────────────────────────
+*.gitignore text
+*.gitattributes text
+*.wrangler.jsonc text diff=json
+
+# ── Binary / archives ────────────────────────
+*.tar.gz binary
+*.zip    binary
+*.png    binary
+*.jpg    binary
+*.sqlite binary
+
+# ── Documentation ────────────────────────────
+docs/** text diff=markdown
