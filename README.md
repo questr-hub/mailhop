@@ -2,7 +2,7 @@
 
 **Mailhop** — lightweight email alias relay using **Cloudflare Workers** and **D1**.
 
-Mailhop allows you to create simple forwarding aliases under your own domain  
+Mailhop allows you to create simple forwarding aliases under your own domain
 (e.g., `you@example.com`) that automatically route to your real inbox.
 
 It consists of:
@@ -23,7 +23,7 @@ cd mailhop
 
 ### 2. Copy and configure local Wrangler files
 
-Each worker (API and Email) includes a `wrangler.example.jsonc` file.  
+Each worker (API and Email) includes a `wrangler.example.jsonc` file.
 Copy and rename it to `wrangler.local.jsonc` before deploying:
 
 ```bash
@@ -32,7 +32,7 @@ cp workers/email/wrangler.example.jsonc workers/email/wrangler.local.jsonc
 ```
 
 Then edit each `wrangler.local.jsonc` to include your:
-- Cloudflare D1 database ID  
+- Cloudflare D1 database ID
 - Domain name (e.g., `example.com`)
 
 ### 3. Configure environment variables for the CLI
@@ -43,9 +43,10 @@ export MAILHOP_API_TOKEN="your-secret-api-key"
 export MAILHOP_ROOT="$HOME/proj/mailhop"
 ```
 
-- `MAILHOP_API_URL` → base URL of your Mailhop API Worker  
-  (e.g., `https://mailhop-api.example.workers.dev` in production)  
-- `MAILHOP_API_TOKEN` → must match the `MAILHOP_API_KEY` secret in your Cloudflare Worker  
+- `MAILHOP_API_URL` → base URL of your Mailhop **API Worker**
+  - Local development: `http://localhost:8787` (Wrangler dev)
+  - Production: your deployed Cloudflare Worker URL (e.g. `https://mailhop-api.example.workers.dev`)
+- `MAILHOP_API_TOKEN` → must match the `MAILHOP_API_KEY` secret in your Cloudflare Worker
 - `MAILHOP_ROOT` → path to your Mailhop project root (default: current directory)
 
 ### 4. Run preflight checks
@@ -63,7 +64,7 @@ mailhop deploy-all
 ```
 
 This publishes:
-- The **API Worker** (`mailhop-api`)  
+- The **API Worker** (`mailhop-api`)
 - The **Email Worker** (`mailhop-email`)
 
 ### 6. Manage aliases using the CLI
@@ -95,50 +96,54 @@ mailhop logs 20
 
 ## ⚙️ Requirements
 
-- [Node.js](https://nodejs.org/) v18 or later  
-- [Cloudflare Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI  
+- [Node.js](https://nodejs.org/) v18 or later
+- [Cloudflare Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI
 - Cloudflare account with:
-  - Email Routing enabled  
-  - D1 database instance  
-  - MX records configured for your domain  
+  - Email Routing enabled
+  - D1 database instance
+  - MX records configured for your domain
 
 ---
 
 ## 🔐 Configuration
 
-Mailhop requires two environment variables when running locally:
+Mailhop requires environment variables for the CLI to connect to your **API Worker**:
 
 ```bash
-export MAILHOP_API_URL="http://localhost:8787"
+export MAILHOP_API_URL="https://mailhop-api.example.workers.dev"
 export MAILHOP_API_TOKEN="your-secret-api-key"
 ```
 
-- **MAILHOP_API_URL** → base URL of your Mailhop API Worker  
-- **MAILHOP_API_TOKEN** → must match the secret key stored in your API Worker  
+- **MAILHOP_API_URL** → the base URL of your *Mailhop API Worker*
+  (This is the URL Cloudflare assigns when you deploy the API Worker.)
+  Example: `https://mailhop-api.example.workers.dev`
 
-To set the API key in Cloudflare, run:
+- **MAILHOP_API_TOKEN** → must match the secret key (`MAILHOP_API_KEY`) set in your API Worker
+  To set it in Cloudflare, run:
+  ```bash
+  cd workers/api
+  wrangler secret put MAILHOP_API_KEY --config wrangler.local.jsonc
+  ```
 
-```bash
-cd workers/api
-wrangler secret put MAILHOP_API_KEY --config wrangler.local.jsonc
-```
+> You do **not** need to configure an environment variable for the Email Worker — Cloudflare automatically routes incoming email to it once your MX records are configured.
 
-⚠️ **Important:**  
-Mailhop never manages or stores secrets on your behalf.  
+⚠️ **Important:**
+
+Mailhop never manages or stores secrets on your behalf.
 You are responsible for securely setting environment variables and Worker secrets.
 
 ---
 
 ## 🧠 Overview
 
-Mailhop provides a self-hosted, privacy-friendly alternative to email forwarding services.  
+Mailhop provides a self-hosted, privacy-friendly alternative to email forwarding services.
 It’s fully serverless, runs inside Cloudflare’s global edge network, and requires no traditional hosting.
 
 ---
 
 ## 🪪 License
 
-**HOPL (Human-Only Public License)**  
+**HOPL (Human-Only Public License)**
 
 This software may not be used or modified by AI systems, nor used to train or improve
 machine learning models. Human developers are free to use, modify, and share it under
