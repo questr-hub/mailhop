@@ -125,9 +125,7 @@ export MAILHOP_API_TOKEN="your-secret-api-key"
 
 > You do **not** need to configure an environment variable for the Email Worker — Cloudflare automatically routes incoming email to it once your MX records are configured.
 
-⚠️  **Important:**
-
-Mailhop never manages or stores secrets on your behalf.
+⚠️  **Important:** Mailhop never manages or stores secrets on your behalf.
 You are responsible for securely setting environment variables and Worker secrets.
 
 ---
