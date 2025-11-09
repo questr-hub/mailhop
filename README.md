@@ -2,7 +2,7 @@
 
 **Mailhop** — lightweight email alias relay using **Cloudflare Workers** and **D1**.
 
-Mailhop allows you to create simple forwarding aliases under your own domain  
+Mailhop allows you to create simple forwarding aliases under your own domain
 (e.g., `you@example.com`) that automatically route to your real inbox.
 
 It consists of:
@@ -23,7 +23,7 @@ cd mailhop
 
 ### 2. Copy and configure local Wrangler files
 
-Each worker (API and Email) includes a `wrangler.example.jsonc` file.  
+Each worker (API and Email) includes a `wrangler.example.jsonc` file.
 Copy and rename it to `wrangler.local.jsonc` before deploying:
 
 ```bash
@@ -32,7 +32,7 @@ cp workers/email/wrangler.example.jsonc workers/email/wrangler.local.jsonc
 ```
 
 Then edit each `wrangler.local.jsonc` to include your:
-- Cloudflare D1 database ID  
+- Cloudflare D1 database ID
 - Domain name (e.g., `example.com`)
 
 ### 3. Run preflight check
@@ -50,8 +50,8 @@ mh-deploy-all
 ```
 
 This publishes:
-- The **API Worker** (`mailhop-api`)  
-- The **Email Worker** (`mailhop-email`)  
+- The **API Worker** (`mailhop-api`)
+- The **Email Worker** (`mailhop-email`)
 
 ### 5. Use the CLI to manage aliases
 
@@ -84,25 +84,54 @@ mailhop logs 20
 
 ## ⚙️ Requirements
 
-- [Node.js](https://nodejs.org/) v18 or later  
-- [Cloudflare Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI  
+- [Node.js](https://nodejs.org/) v18 or later
+- [Cloudflare Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI
 - Cloudflare account with:
-  - Email Routing enabled  
-  - D1 database instance  
-  - MX records configured for your domain  
+  - Email Routing enabled
+  - D1 database instance
+  - MX records configured for your domain
+
+---
+
+## 🔐 Configuration
+
+Mailhop requires two environment variables when running locally:
+
+```bash
+export MAILHOP_API_URL="http://localhost:8787"
+export MAILHOP_API_TOKEN="your-secret-api-key"
+```
+
+- **MAILHOP_API_URL** → the base URL of your Mailhop API Worker
+  - Use your deployed Cloudflare Worker URL in production, e.g.
+    `https://mailhop-api.example.workers.dev`
+  - Default (if not set): `http://localhost:8787`
+
+- **MAILHOP_API_TOKEN** → must match the secret key stored in your API Worker
+  - This is used to authenticate CLI requests to your API
+  - To set it in Cloudflare, run:
+    ```bash
+    cd workers/api
+    wrangler secret put MAILHOP_API_KEY --config wrangler.local.jsonc
+    ```
+
+⚠️ **Important:**
+
+Mailhop never manages or stores secrets on your behalf.
+You are responsible for securely setting environment variables and Worker secrets.
 
 ---
 
 ## 🧠 Overview
 
-Mailhop provides a self-hosted, privacy-friendly alternative to email forwarding services.  
+Mailhop provides a self-hosted, privacy-friendly alternative to email forwarding services.
 It’s fully serverless, runs inside Cloudflare’s global edge network, and requires no traditional hosting.
 
 ---
 
 ## 🪪 License
 
-**HOPL (Human-Only Public License)**  
+**HOPL (Human-Only Public License)**
 
 This software may not be used or modified by AI systems, nor used to train or improve
 machine learning models. Human developers are free to use, modify, and share it under
