@@ -1,9 +1,7 @@
 # Mailhop
 
 **Mailhop** — lightweight email alias relay using **Cloudflare Workers** and **D1**.
-
-Mailhop allows you to create simple forwarding aliases under your own domain
-(e.g., `you@example.com`) that automatically route to your real inbox.
+A self-hosted, privacy-friendly alternative to traditional email forwarding services — fully serverless and global by design.
 
 It consists of:
 - 🧩 **mailhop-api** — REST API for alias management (stored in D1)
@@ -127,17 +125,75 @@ export MAILHOP_API_TOKEN="your-secret-api-key"
 
 > You do **not** need to configure an environment variable for the Email Worker — Cloudflare automatically routes incoming email to it once your MX records are configured.
 
-⚠️ **Important:**
+⚠️  **Important:**
 
 Mailhop never manages or stores secrets on your behalf.
 You are responsible for securely setting environment variables and Worker secrets.
 
 ---
 
-## 🧠 Overview
+## 📬 Email Routing Setup
 
-Mailhop provides a self-hosted, privacy-friendly alternative to email forwarding services.
-It’s fully serverless, runs inside Cloudflare’s global edge network, and requires no traditional hosting.
+To enable Mailhop to receive and forward messages, you must configure **Cloudflare Email Routing** for your domain.
+This ensures incoming email is passed to your Mailhop Email Worker for processing.
+
+### 1. Enable Email Routing in Cloudflare
+
+1. Log into the [Cloudflare Dashboard](https://dash.cloudflare.com/).
+2. Select your domain.
+3. In the sidebar, go to **Email → Email Routing**.
+4. Click **Enable Email Routing** if it’s not already active.
+
+Cloudflare will automatically assign the proper MX records for you.
+These typically look like:
+
+```
+route1.mx.cloudflare.net
+route2.mx.cloudflare.net
+route3.mx.cloudflare.net
+```
+
+You **do not** need to manually create these — they are added automatically when Email Routing is enabled.
+
+---
+
+### 2. Add and verify your destination addresses
+
+Cloudflare requires that all email destinations be verified to prevent spam and abuse.
+
+1. In the **Email Routing** screen, scroll to **Destination addresses**.
+2. Add each email address you want Mailhop to forward to.
+3. Check your inbox for Cloudflare’s verification email.
+4. Click the verification link to confirm you own the address.
+
+> ⚠️  Mailhop will only forward to destinations that have been verified in Cloudflare.
+> If you forget this step, emails will be rejected with “550 Destination not verified.”
+
+---
+
+### 3. Configure the Catch-All Rule
+
+Mailhop relies on a **catch-all rule** to handle all incoming addresses under your domain and route them into the Email Worker.
+
+1. Under **Custom addresses**, scroll to the **Catch-all address** section.
+2. Enable the catch-all rule.
+3. Set the **Action** to **Send to a Worker**.
+4. Choose your deployed Mailhop Email Worker (e.g., `mailhop-email`).
+
+Example configuration:
+
+| Custom address | Action         | Destination     | Status   |
+|----------------|----------------|-----------------|----------|
+| Catch-All      | Send to Worker | mailhop-email   | Enabled  |
+
+> The catch-all rule applies at the zone-level domain (e.g., `example.com`) and not on subdomains.
+
+Once this is set, all messages sent to `*@example.com` will be routed through your Mailhop Email Worker, which then forwards them according to your D1 alias table.
+
+---
+
+> ✅ You do **not** need to configure environment variables for the email worker;
+> Cloudflare handles all routing automatically once Email Routing and MX records are enabled.
 
 ---
 
