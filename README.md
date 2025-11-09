@@ -12,9 +12,98 @@ It consists of:
 
 ---
 
-### License
+## 🚀 Quick Start
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/questr-hub/mailhop.git
+cd mailhop
+```
+
+### 2. Copy and configure local Wrangler files
+
+Each worker (API and Email) includes a `wrangler.example.jsonc` file.  
+Copy and rename it to `wrangler.local.jsonc` before deploying:
+
+```bash
+cp workers/api/wrangler.example.jsonc workers/api/wrangler.local.jsonc
+cp workers/email/wrangler.example.jsonc workers/email/wrangler.local.jsonc
+```
+
+Then edit each `wrangler.local.jsonc` to include your:
+- Cloudflare D1 database ID  
+- Domain name (e.g., `example.com`)
+
+### 3. Run preflight check
+
+Before deploying, confirm both workers are configured correctly:
+
+```bash
+mh-preflight
+```
+
+### 4. Deploy both workers
+
+```bash
+mh-deploy-all
+```
+
+This publishes:
+- The **API Worker** (`mailhop-api`)  
+- The **Email Worker** (`mailhop-email`)  
+
+### 5. Use the CLI to manage aliases
+
+You can create, list, and delete email aliases using the CLI:
+
+```bash
+# List all aliases
+mailhop list
+
+# Create a new alias
+mailhop create hello@example.com you@inbox.example.net "Personal alias"
+
+# View details
+mailhop inspect hello@example.com
+
+# Update alias settings
+mailhop update hello@example.com --allow-plus=false
+
+# Delete an alias
+mailhop delete hello@example.com
+```
+
+### 6. Check recent email routing logs
+
+```bash
+mailhop logs 20
+```
+
+---
+
+## ⚙️ Requirements
+
+- [Node.js](https://nodejs.org/) v18 or later  
+- [Cloudflare Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) CLI  
+- Cloudflare account with:
+  - Email Routing enabled  
+  - D1 database instance  
+  - MX records configured for your domain  
+
+---
+
+## 🧠 Overview
+
+Mailhop provides a self-hosted, privacy-friendly alternative to email forwarding services.  
+It’s fully serverless, runs inside Cloudflare’s global edge network, and requires no traditional hosting.
+
+---
+
+## 🪪 License
 
 **HOPL (Human-Only Public License)**  
+
 This software may not be used or modified by AI systems, nor used to train or improve
 machine learning models. Human developers are free to use, modify, and share it under
 the terms of the included HOPL license.
