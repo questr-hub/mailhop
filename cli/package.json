@@ -7,8 +7,8 @@
   },
   "type": "module",
   "keywords": ["email", "alias", "cli", "cloudflare", "d1", "mailhop"],
-  "author": "Sean McKay",
-  "license": "HOPL",
+  "author": "questr-hub",
+  "license": "MIT",
   "repository": "github:questr-hub/mailhop",
   "engines": {
     "node": ">=18"

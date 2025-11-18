@@ -197,8 +197,4 @@ Once this is set, all messages sent to `*@example.com` will be routed through yo
 
 ## 🪪 License
 
-**HOPL (Human-Only Public License)**
-
-This software may not be used or modified by AI systems, nor used to train or improve
-machine learning models. Human developers are free to use, modify, and share it under
-the terms of the included HOPL license.
+**MIT**
